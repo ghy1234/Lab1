@@ -259,11 +259,9 @@ public class Test {
         String exp1=exp;
         while (true)
         {
-            //System.out.println(s);
             s=br.readLine();
             Test test = new Test();
             //String exp = "4*x+y*x*x+y*2+y+x+z*x*y";
-            //System.out.println(s);
             long start=System.nanoTime();
             System.out.println("算法开始时间： "+start+"ns");
             if (s.charAt(0) != '!') {
@@ -292,7 +290,7 @@ public class Test {
             System.out.println("算法结束时间： "+end+"ns");
             System.out.println("算法运行时间： "+(end-start)+"ns");
             //System.out.println("****");
-            //4*x+y*x*x+y*2+y+x+z*x*y   !simplify x=22 y=1     !d/dx
+            //4*x+y*x*x+y*2+y+x+z*x*y   !simplify x=22 y=1     !d/dx   !d/dy  !d/dz
         }
 
     }

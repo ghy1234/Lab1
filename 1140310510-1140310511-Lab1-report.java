@@ -85,7 +85,7 @@ public class Test {
         return exp;
     }
 
-    public String simplify(String exp)
+    public String simplify(String exp)               /////////////////////////
     {
         String[] str=exp.split("\\+");
         exp="";
@@ -200,7 +200,7 @@ public class Test {
 
     public String der(String s,String exp)                  //4*x+y*x*x+y*2+y+x+z*x*y   !d/dx
     {
-        String[] arr;
+        String[] arr;                          ///////////////////////////////
         arr = s.split("d");
         String x=arr[2];
         String[] str=exp.split("\\+");

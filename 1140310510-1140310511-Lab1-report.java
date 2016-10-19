@@ -8,7 +8,7 @@ import java.util.*;
 
 public class Test {
 
-    public String expression(String s){
+    public String expression(String s){                ///////////////////////////
         int a[];
         int n,m,k;
         String[] arr;
@@ -39,7 +39,7 @@ public class Test {
         return s;
 
     }
-    public String putin(String s,String exp) {
+    public String putin(String s,String exp) {                  /////////////////////////////////
         int k = 0;
         String x;
         String y;

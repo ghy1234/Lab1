@@ -8,7 +8,9 @@ import java.util.*;
 
 public class Test {
 
+
     public String expression(String s){                
+
         int a[];
         int n,m,k;
         String[] arr;
@@ -39,7 +41,9 @@ public class Test {
         return s;
 
     }
-    public String putin(String s,String exp) {                  /////////////////////////////////
+
+
+    public String putin(String s,String exp) {
         int k = 0;
         String x;
         String y;
@@ -82,10 +86,13 @@ public class Test {
         }
         //System.out.println(exp);              
 
+
         return exp;
     }
 
-    public String simplify(String exp)               /////////////////////////
+
+
+    public String simplify(String exp)
     {
         String[] str=exp.split("\\+");
         exp="";
@@ -200,7 +207,7 @@ public class Test {
 
     public String der(String s,String exp)                  //4*x+y*x*x+y*2+y+x+z*x*y   !d/dx
     {
-        String[] arr;                          ///////////////////////////////
+        String[] arr;
         arr = s.split("d");
         String x=arr[2];
         String[] str=exp.split("\\+");
@@ -259,10 +266,11 @@ public class Test {
         String exp1=exp;
         while (true)
         {
-            //ssssssss
-	    s=br.readLine();
+            //System.out.println(s);
+            s=br.readLine();
             Test test = new Test();
             //String exp = "4*x+y*x*x+y*2+y+x+z*x*y";
+            //System.out.println(s);
             long start=System.nanoTime();
             System.out.println("算法开始时间： "+start+"ns");
             if (s.charAt(0) != '!') {
@@ -292,6 +300,7 @@ public class Test {
             System.out.println("算法运行时间： "+(end-start)+"ns");
             //System.out.println("****");
             //4*x+y*x*x+y*2+y+x+z*x*y   !simplify x=22 y=1     !d/dx   
+
         }
 
     }

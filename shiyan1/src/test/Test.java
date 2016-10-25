@@ -1,4 +1,4 @@
-
+package test;
 /**
  * Created by think on 2016/9/28.
  */
@@ -6,52 +6,61 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+/**
+ * 输入多项式，进行化简。按输入命令进行求导或带入求值，输入错误时提示错误信息.
+ * @author abgnwl
+ * 
+ */
 public class Test {
 
-	/**
-	 * 查看输入字符串是否合法 <br>
-	 * 规则：1）变量名为单个字符 2）只包含数字、字母、+和*的标准多项式
+	/**.
+	 * 查看输入字符串是否合法. <br>
+	 * 规则：1）变量名为单个字符 2）只包含数字、字母、+和*的标准多项式.
 	 * 
 	 * @param line
 	 *            输入字符串
 	 * @return 如果合法,则原样输出，否则输出error
 	 */
-	public String checkSyntax(String line) {
+	public final String checkSyntax(final String line) {
 		boolean error = false;
 		for (int i = 0; i < line.length(); i++) {
 			if ((line.charAt(i) != '+') && (line.charAt(i) != '*')) {
-				if (Character.isLetterOrDigit(line.charAt(i)) == false) {
+				if (!Character.isLetterOrDigit(line.charAt(i))) {
 					error = true;
 				}
 			}
 			if (i > 0) {
-				if (((line.charAt(i) == '+') || (line.charAt(i) == '*'))
-						&& ((line.charAt(i - 1) == '+') || (line.charAt(i - 1) == '*'))) {
+				if (((line.charAt(i) == '+') 
+							|| (line.charAt(i) == '*'))
+						&& ((line.charAt(i - 1) == '+') 
+							|| (line.charAt(i - 1) == '*'))) {
 					error = true;
 				}
-				if ((Character.isLetterOrDigit(line.charAt(i)) == true)
-						&& (Character.isLetterOrDigit(line.charAt(i - 1)) == true)) {
+				if ((Character.isLetterOrDigit(line.charAt(i)))
+						&& (Character.isLetterOrDigit(line.charAt(i - 1)))) {
 					error = true;
-					if ((Character.isDigit(line.charAt(i))) && (Character.isDigit(line.charAt(i - 1)) == true)) {
+					if (Character.isDigit(line.charAt(i)) 
+							&& Character.isDigit(line.charAt(i - 1))) {
 						error = false;
 					}
 				}
 			}
 		}
 		if (error) {
-			line = "Error";
+			return "Error";
 		}
 		return line;
 	}
 
 	/**
-	 * 将变量的值代入多项式
+	 * 将变量的值代入多项式.
 	 * 
-	 * @param line
-	 *            输入的用于代入的表达式， polynomial 多项式
+	 * @param line 带入命令
+	 * @param polynomial 原多项式
 	 * @return 如果合法,返回代入后的多项式，否则返回Error
 	 */
-	public String substitute(String line, String polynomial) {
+	public final String substitute(final String line, final String polynomial) {
+		String afterPolynomial = new String(polynomial);
 		String[] substitutionArr;
 		substitutionArr = line.split(" ");
 		if (!"!simplify".equals(substitutionArr[0])) {
@@ -61,8 +70,8 @@ public class Test {
 			String[] substitution = substitutionArr[i].split("=");
 			String variable = substitution[0];
 			String value = substitution[1];
-			String[] monomialArr = polynomial.split("\\+");
-			polynomial = "";
+			String[] monomialArr = afterPolynomial.split("\\+");
+			afterPolynomial = "";
 			for (int j = 0; j < monomialArr.length; j++) {
 				String[] monomial = monomialArr[j].split("\\*");
 				monomialArr[j] = "";
@@ -76,23 +85,23 @@ public class Test {
 						monomialArr[j] = monomialArr[j] + "*";
 					}
 				}
-				polynomial = polynomial + monomialArr[j];
+				afterPolynomial = afterPolynomial + monomialArr[j];
 				if (j < monomialArr.length - 1) {
-					polynomial = polynomial + "+";
+					afterPolynomial = afterPolynomial + "+";
 				}
 			}
 		}
-		return polynomial;
+		return afterPolynomial;
 	}
 
 	/**
-	 * 将表达式进行化简和格式化
+	 * 将表达式进行化简和格式化.
 	 * 
 	 * @param exp
 	 *            表达式的字符串
 	 * @return 化简并格式化后的字符串
 	 */
-	public String simplify(String exp) {
+	public final String simplify(final String exp) {
 		String[] monomialList = exp.split("\\+");
 		String afterExp = ""; // 化简后的表达式
 		String monomial = "";
@@ -193,24 +202,22 @@ public class Test {
 	}
 
 	/**
-	 * 对变量求导
-	 * 
-	 * @param line
-	 *            求导命令字符串 polynomial 原表达式
-	 * @return 返回求导后的多项式
+	 * 	对变量求导.
+	 * @param line 求导命令字符串
+	 * @param polynomial  原表达式
+	 * @return 若输入正确，返回求导后的字符串，否则返回错误信息
 	 */
-	public String derivation(String line, String polynomial) // 4*x+y*x*x+y*2+y+x+z*x*y
-																// !d/dx
-	{
+	public final String derivation(final String line, final String polynomial) {
+		String afterPolynomial = new String(polynomial);
 		String varable = line.split("d")[2];
-		String[] monomialArr = polynomial.split("\\+");
-		polynomial = "";
+		String[] monomialArr = afterPolynomial.split("\\+");
+		afterPolynomial = "";
 		for (int i = 0; i < monomialArr.length; i++) {
 			int power = 0;
 			String[] monomial = monomialArr[i].split("\\*");
 			monomialArr[i] = "";
 			for (int j = 0; j < monomial.length; j++) {
-				if (varable.equals(monomial[j]) == true) {
+				if (varable.equals(monomial[j])) {
 					power++;
 				}
 			}
@@ -219,7 +226,7 @@ public class Test {
 			} else {
 				boolean changed = false;
 				for (int j = 0; j < monomial.length; j++) {
-					if ((varable.equals(monomial[j]) == true) && !changed) {
+					if (varable.equals(monomial[j]) && !changed) {
 						changed = true;
 						monomial[j] = String.valueOf(power);
 					}
@@ -229,18 +236,24 @@ public class Test {
 					}
 				}
 			}
-			if (monomialArr[i].equals("") == false) {
-				polynomial = polynomial + monomialArr[i];
+			if (!monomialArr[i].equals("")) {
+				afterPolynomial = afterPolynomial + monomialArr[i];
 				if (i < monomialArr.length - 1) {
-					polynomial = polynomial + "+";
+					afterPolynomial = afterPolynomial + "+";
 				}
 			}
 		}
-		return polynomial;
+		return afterPolynomial;
 	}
 
-	public static void main(String args[]) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	/**
+	 * 程序主入口.
+	 * @param args 参数
+	 * @throws IOException IO异常
+	 */
+	public static void main(final String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(
+				new InputStreamReader(System.in));
 		String line;
 		String polynomial = "";
 		String originalPoly = polynomial;

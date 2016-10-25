@@ -112,6 +112,9 @@ public class Laboratory4 {
 			monoBuffer = new StringBuffer();
 			for (int j = 0; j < factorList.length; j++) {
 				final String factor = factorList[j];
+				if (factor.length() == 0) {
+					continue;
+				}
 				final char firstChar = factor.charAt(0);
 				if (Character.isDigit(firstChar)) {
 					final int numFactor = Integer.parseInt(factor);
@@ -134,42 +137,50 @@ public class Laboratory4 {
 		monomialList = tempBuffer.toString().split("\\+");
 		afterExp = new StringBuffer();
 		for (int i = 0; i < monomialList.length; i++) {
+			if ("".equals(monomialList[i])) {
+				continue;
+			}
 			final String[] factorList = monomialList[i].split("\\*");
 			for (int j = 0; j < i; j++) {
 				String[] factorList2 = monomialList[j].split("\\*");
-				boolean isSame = true;
-				if ("".equals(monomialList[j])) {
-					isSame = false;
+				if (factorList.length != factorList2.length || monomialList[j].length() == 0) {
+					continue;
 				}
-				if (factorList.length == factorList2.length) {
-					for (int k = 1; k < factorList.length; k++) {
-						if (!factorList[k].equals(factorList2[k])) {
-							isSame = false;
-						}
+				
+				boolean isSame = true;
+				for (int k = 1; k < factorList.length; k++) {
+					if (!factorList[k].equals(factorList2[k])) {
+						isSame = false;
+						break;
 					}
-				} else {
-					isSame = false;
 				}
 				if (isSame) {
-					monomialList[i] = "";
-					monomialList[j] = "";
-
+					StringBuffer buffer = new StringBuffer();
 					final int factor = Integer.parseInt(factorList[0]);
 					final int factor2 = Integer.parseInt(factorList2[0]);
 					factorList2[0] = String.valueOf(factor + factor2);
 					for (int k = 0; k < factorList2.length; k++) {
-						monomialList[j] = monomialList[j] + factorList2[k];
+						buffer.append(factorList2[k]);
 						if (k < factorList2.length - 1) {
-							monomialList[j] = monomialList[j] + "*";
+							buffer.append('*');
 						}
 						// 由factorList重构monomial
 					}
+					monomialList[i] = "";
+					monomialList[j] = buffer.toString();
 				}
 			}
 		}
 		// Step2：合并同类项
 
 		for (int i = 0; i < monomialList.length; i++) {
+			if (monomialList[i].length() > 2 
+					&& monomialList[i].charAt(0) == '1' 
+					&& monomialList[i].charAt(1) == '*') {
+				monomialList[i] = monomialList[i].substring(2, monomialList[i].length());
+			}
+			
+			/*
 			String[] factorList = monomialList[i].split("\\*");
 			monomialList[i] = "";
 			if ("1".equals(factorList[0]) && factorList.length > 1) {
@@ -187,6 +198,7 @@ public class Laboratory4 {
 					monomialList[i] = monomialList[i] + "*";
 				}
 			}
+			*/
 		}
 		// Step3：将系数为1项删除系数
 

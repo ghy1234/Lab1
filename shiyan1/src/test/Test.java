@@ -16,9 +16,7 @@ public class Test {
 	/**.
 	 * 查看输入字符串是否合法. <br>
 	 * 规则：1）变量名为单个字符 2）只包含数字、字母、+和*的标准多项式.
-	 * 
-	 * @param line
-	 *            输入字符串
+	 * @param line 输入字符串
 	 * @return 如果合法,则原样输出，否则输出error
 	 */
 	public final String checkSyntax(final String line) {
@@ -60,7 +58,7 @@ public class Test {
 	 * @return 如果合法,返回代入后的多项式，否则返回Error
 	 */
 	public final String substitute(final String line, final String polynomial) {
-		String afterPolynomial = new String(polynomial);
+		String afterPolynomial = polynomial;
 		String[] substitutionArr;
 		substitutionArr = line.split(" ");
 		if (!"!simplify".equals(substitutionArr[0])) {
@@ -208,7 +206,7 @@ public class Test {
 	 * @return 若输入正确，返回求导后的字符串，否则返回错误信息
 	 */
 	public final String derivation(final String line, final String polynomial) {
-		String afterPolynomial = new String(polynomial);
+		String afterPolynomial = polynomial;
 		String varable = line.split("d")[2];
 		String[] monomialArr = afterPolynomial.split("\\+");
 		afterPolynomial = "";
@@ -259,6 +257,9 @@ public class Test {
 		String originalPoly = polynomial;
 		while (true) {
 			line = br.readLine();
+			if("".equals(line)) {
+				continue;
+			}
 			Test test = new Test();
 			long start = System.nanoTime();
 			System.out.println("算法开始时间： " + start + "ns");

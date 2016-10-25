@@ -11,9 +11,9 @@ import java.io.InputStreamReader;
  * @author abgnwl
  * 
  */
-public class Test {
+public class Laboratory4 {
 
-	/**.
+	/**
 	 * 查看输入字符串是否合法. <br>
 	 * 规则：1）变量名为单个字符 2）只包含数字、字母、+和*的标准多项式.
 	 * @param line 输入字符串
@@ -22,20 +22,19 @@ public class Test {
 	public final String checkSyntax(final String line) {
 		boolean error = false;
 		for (int i = 0; i < line.length(); i++) {
-			if ((line.charAt(i) != '+') && (line.charAt(i) != '*')) {
-				if (!Character.isLetterOrDigit(line.charAt(i))) {
-					error = true;
-				}
+			if (line.charAt(i) != '+' && line.charAt(i) != '*'
+					&& !Character.isLetterOrDigit(line.charAt(i))) {
+				error = true;
 			}
 			if (i > 0) {
-				if (((line.charAt(i) == '+') 
-							|| (line.charAt(i) == '*'))
-						&& ((line.charAt(i - 1) == '+') 
-							|| (line.charAt(i - 1) == '*'))) {
+				if ((line.charAt(i) == '+'
+							|| line.charAt(i) == '*')
+						&& (line.charAt(i - 1) == '+' 
+							|| line.charAt(i - 1) == '*')) {
 					error = true;
 				}
-				if ((Character.isLetterOrDigit(line.charAt(i)))
-						&& (Character.isLetterOrDigit(line.charAt(i - 1)))) {
+				if (Character.isLetterOrDigit(line.charAt(i))
+						&& Character.isLetterOrDigit(line.charAt(i - 1))) {
 					error = true;
 					if (Character.isDigit(line.charAt(i)) 
 							&& Character.isDigit(line.charAt(i - 1))) {
@@ -44,10 +43,13 @@ public class Test {
 				}
 			}
 		}
+		String result;
 		if (error) {
-			return "Error";
+			result = "Error";
+		}else{
+			result =  line;
 		}
-		return line;
+		return result;
 	}
 
 	/**
@@ -58,20 +60,20 @@ public class Test {
 	 * @return 如果合法,返回代入后的多项式，否则返回Error
 	 */
 	public final String substitute(final String line, final String polynomial) {
-		String afterPolynomial = polynomial;
 		String[] substitutionArr;
 		substitutionArr = line.split(" ");
 		if (!"!simplify".equals(substitutionArr[0])) {
 			return "Error";
-		}
+		}		
+		String afterPolynomial = polynomial;
 		for (int i = 1; i < substitutionArr.length; i++) {
-			String[] substitution = substitutionArr[i].split("=");
-			String variable = substitution[0];
-			String value = substitution[1];
+			final String[] substitution = substitutionArr[i].split("=");
+			final String variable = substitution[0];
+			final String value = substitution[1];
 			String[] monomialArr = afterPolynomial.split("\\+");
 			afterPolynomial = "";
 			for (int j = 0; j < monomialArr.length; j++) {
-				String[] monomial = monomialArr[j].split("\\*");
+				final String[] monomial = monomialArr[j].split("\\*");
 				monomialArr[j] = "";
 				for (int o = 0; o < monomial.length; o++) {
 					if (monomial[o].equals(variable)) {
@@ -101,34 +103,38 @@ public class Test {
 	 */
 	public final String simplify(final String exp) {
 		String[] monomialList = exp.split("\\+");
-		String afterExp = ""; // 化简后的表达式
-		String monomial = "";
+		StringBuffer afterExp = new StringBuffer(); // 化简后的表达式
+		StringBuffer monoBuffer;
 		for (int i = 0; i < monomialList.length; i++) {
 			int constant = 1;
-			String[] factorList = monomialList[i].split("\\*");
-			monomial = "";
+			final String monomial = monomialList[i];
+			final String[] factorList = monomial.split("\\*");
+			monoBuffer = new StringBuffer();
 			for (int j = 0; j < factorList.length; j++) {
-				if (Character.isDigit(factorList[j].charAt(0))) {
-					int factor = Integer.parseInt(factorList[j]);
-					constant = constant * factor;
+				final String factor = factorList[j];
+				final char firstChar = factor.charAt(0);
+				if (Character.isDigit(firstChar)) {
+					final int numFactor = Integer.parseInt(factor);
+					constant = constant * numFactor;
 				} else {
-					monomial = monomial + "*" + factorList[j];
+					monoBuffer.append('*');
+					monoBuffer.append(factor);
 				}
 			}
-			monomial = String.valueOf(constant) + monomial;
-			afterExp = afterExp + monomial;
+			afterExp = afterExp.append(String.valueOf(constant)).append(monoBuffer);
 			if (i < monomialList.length - 1) {
-				afterExp = afterExp + "+";
+				afterExp = afterExp.append("+");
 			}
 		}
 
-		afterExp = "0+" + afterExp;
+		final StringBuffer tempBuffer = new StringBuffer();
+		tempBuffer.append("0+").append(afterExp);
 		// Step1: 将所有的系数相乘
 
-		monomialList = afterExp.split("\\+");
-		afterExp = "";
+		monomialList = tempBuffer.toString().split("\\+");
+		afterExp = new StringBuffer();
 		for (int i = 0; i < monomialList.length; i++) {
-			String[] factorList = monomialList[i].split("\\*");
+			final String[] factorList = monomialList[i].split("\\*");
 			for (int j = 0; j < i; j++) {
 				String[] factorList2 = monomialList[j].split("\\*");
 				boolean isSame = true;
@@ -148,8 +154,8 @@ public class Test {
 					monomialList[i] = "";
 					monomialList[j] = "";
 
-					int factor = Integer.parseInt(factorList[0]);
-					int factor2 = Integer.parseInt(factorList2[0]);
+					final int factor = Integer.parseInt(factorList[0]);
+					final int factor2 = Integer.parseInt(factorList2[0]);
 					factorList2[0] = String.valueOf(factor + factor2);
 					for (int k = 0; k < factorList2.length; k++) {
 						monomialList[j] = monomialList[j] + factorList2[k];
@@ -166,13 +172,13 @@ public class Test {
 		for (int i = 0; i < monomialList.length; i++) {
 			String[] factorList = monomialList[i].split("\\*");
 			monomialList[i] = "";
-			if ("1".equals((factorList[0])) && factorList.length > 1) {
+			if ("1".equals(factorList[0]) && factorList.length > 1) {
 				factorList[0] = "";
 			} else {
-				if (factorList.length != 1) {
-					monomialList[i] = factorList[0] + "*";
-				} else {
+				if (factorList.length == 1) {
 					monomialList[i] = factorList[0];
+				} else {
+					monomialList[i] = factorList[0] + "*";
 				}
 			}
 			for (int j = 1; j < factorList.length; j++) {
@@ -186,16 +192,16 @@ public class Test {
 
 		for (int i = 0; i < monomialList.length; i++) {
 			if (!"".equals(monomialList[i]) && !"0".equals((monomialList[i]))) {
-				afterExp = afterExp + monomialList[i];
-				afterExp = afterExp + "+";
+				afterExp.append(monomialList[i]);
+				afterExp.append('+');
 			}
 		}
-		if ("".equals(afterExp)) {
-			afterExp = "0+";
+		if (afterExp.length() == 0) {
+			afterExp.append("0+");
 		}
-		afterExp = afterExp.substring(0, afterExp.length() - 1);
+		afterExp.deleteCharAt(afterExp.length()-1);
 		// Step4：将项为0的情况删除
-		return afterExp;
+		return afterExp.toString();
 
 	}
 
@@ -207,12 +213,12 @@ public class Test {
 	 */
 	public final String derivation(final String line, final String polynomial) {
 		String afterPolynomial = polynomial;
-		String varable = line.split("d")[2];
+		final String varable = line.split("d")[2];
 		String[] monomialArr = afterPolynomial.split("\\+");
 		afterPolynomial = "";
 		for (int i = 0; i < monomialArr.length; i++) {
 			int power = 0;
-			String[] monomial = monomialArr[i].split("\\*");
+			final String[] monomial = monomialArr[i].split("\\*");
 			monomialArr[i] = "";
 			for (int j = 0; j < monomial.length; j++) {
 				if (varable.equals(monomial[j])) {
@@ -234,7 +240,8 @@ public class Test {
 					}
 				}
 			}
-			if (!monomialArr[i].equals("")) {
+			final String mono = monomialArr[i];
+			if (!"".equals(mono)) {
 				afterPolynomial = afterPolynomial + monomialArr[i];
 				if (i < monomialArr.length - 1) {
 					afterPolynomial = afterPolynomial + "+";
@@ -250,18 +257,18 @@ public class Test {
 	 * @throws IOException IO异常
 	 */
 	public static void main(final String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(
+		BufferedReader buffer = new BufferedReader(
 				new InputStreamReader(System.in));
 		String line;
 		String polynomial = "";
 		String originalPoly = polynomial;
 		while (true) {
-			line = br.readLine();
+			line = buffer.readLine();
 			if("".equals(line)) {
 				continue;
 			}
-			Test test = new Test();
-			long start = System.nanoTime();
+			Laboratory4 test = new Laboratory4();
+			final long start = System.nanoTime();
 			System.out.println("算法开始时间： " + start + "ns");
 			if (line.charAt(0) != '!') {
 				polynomial = test.checkSyntax(line);
@@ -276,13 +283,13 @@ public class Test {
 			} else {
 				polynomial = "error";
 			}
-
+			
 			if (line.charAt(0) == '-') {
 				break;
 			}
 
 			System.out.println(polynomial);
-			long end = System.nanoTime();
+			final long end = System.nanoTime();
 			System.out.println("算法结束时间： " + end + "ns");
 			System.out.println("算法运行时间： " + (end - start) + "ns");
 		}

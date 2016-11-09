@@ -9,6 +9,9 @@ import org.junit.Test;
 import org.junit.Assert;
 import java.lang.reflect.Method;
 
+import static com.sun.xml.internal.ws.dump.LoggingDumpTube.Position.Before;
+
+
 public class TestTest {
 
 	@Before
@@ -43,6 +46,21 @@ public class TestTest {
 
 	@Test
 	public void testDer() {
+		try {
+	        test.Test a = new test.Test();
+	        Class[] arg = new Class[2];
+	        arg[0] = String.class;
+	        arg[1] = String.class;
+	        Method b = a.getClass().getDeclaredMethod("der", arg);
+	        b.setAccessible(true);
+	        Object[] sArg = new Object[2];
+	        sArg[0] = "!d/dx";
+	        sArg[1] = "";
+	        Object c = b.invoke(a, sArg);
+	        Assert.assertEquals(c, "0");
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
 		
 	}
 

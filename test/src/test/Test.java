@@ -222,7 +222,7 @@ public class Test {
             }
             if (q==0)
             {
-                str[i]="";
+                str[i]="0";
             }else
             {
                 int w=0;
